@@ -6,100 +6,916 @@
 
 body {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: radial-gradient(circle at 30% 20%, #f3e4c9 0%, #d4b896 50%, #A98B76 100%);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.glass-bar {
+/* ─── CLAYMORPHISM NAVBAR ───────────────────────────────────── */
+.clay-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: fixed;
-    top: 15%;
+    top: 10px;
     left: 20px;
     right: 20px;
     max-width: 95%;
-    padding: 15px 40px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+
+    /* Padding reduced to keep bar height constant while logo is bigger */
+    padding: 14px 40px;
+    min-height: 80px;
+
+    /* Claymorphism: soft rounded blob with thick multi-layer shadow */
+    border-radius: 28px;
+    background: rgba(255, 240, 220, 0.82);
+
+    /* Clay-style layered shadow — thick bottom shadow + soft glow */
+    box-shadow:
+        0 8px 0px rgba(169, 120, 80, 0.45),
+        /* grounded bottom shadow */
+        0 16px 40px rgba(160, 100, 60, 0.25),
+        /* ambient depth */
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        /* top highlight */
+        inset 0 -2px 4px rgba(180, 130, 90, 0.15);
+    /* bottom inner shadow */
+
+    /* No blur — clay is opaque, not transparent */
+    border: 2px solid rgba(255, 255, 255, 0.65);
 }
 
+/* ─── NAV LEFT: logo + brand ───────────────────────────────── */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ─── LOGO: blended into page bg ───────────────────────────── */
+.nav-logo {
+    height: 60px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 50%;
+
+    /* Blend the logo background into the warm page colour */
+    mix-blend-mode: multiply;
+    opacity: 0.9;
+
+    /* Gentle shadow so it still feels grounded */
+    filter: drop-shadow(0 2px 4px rgba(120, 80, 40, 0.25));
+}
+
+/* ─── BRAND NAME ─────────────────────────────────────────────── */
 .brand-name {
-    color: whitesmoke;
+    color: #6b3f1f;
     font-size: 28px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 0px rgba(255, 255, 255, 0.6);
 }
 
+/* ─── NAV LINKS ──────────────────────────────────────────────── */
 .nav-links {
     display: flex;
     align-items: center;
-    gap: 25px;
+    gap: 10px;
 }
 
 .nav-link {
-    color: rgba(255, 255, 255, 0.9);
+    color: #7a4828;
     text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.3s ease;
-    padding: 8px 12px;
-    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 9px 16px;
+    border-radius: 14px;
+    transition: all 0.25s ease;
+    background: transparent;
 }
 
 .nav-link:hover {
-    color: whitesmoke;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(169, 120, 80, 0.18);
+    color: #4e2b0f;
     transform: translateY(-2px);
-    
+    box-shadow: 0 4px 0px rgba(169, 120, 80, 0.3);
 }
 
-
+/* Login pill */
+.nav-link.login {
+    background: rgba(200, 155, 110, 0.25);
+    border: 1.5px solid rgba(169, 120, 80, 0.35);
+    border-radius: 50px;
+}
 
 .nav-link.login:hover {
-    background: rgba(255, 255, 255, 0.35);
+    background: rgba(200, 155, 110, 0.45);
     transform: translateY(-2px);
+    box-shadow: 0 4px 0px rgba(169, 120, 80, 0.3);
 }
 
+/* Register pill — solid clay button */
 .nav-link.register {
-    color: whitesmoke;
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    border-radius: 50px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 5px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .nav-link.register:hover {
     transform: translateY(-2px);
+    box-shadow:
+        0 7px 0px rgba(120, 70, 30, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    filter: brightness(1.07);
 }
 
-.glass-content {
+.nav-link.register:active {
+    transform: translateY(2px);
+    box-shadow:
+        0 2px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ─── CLAYMORPHISM CONTENT CARD ──────────────────────────────── */
+.clay-content {
     gap: 25px;
-    text-align:end;
     display: flex;
-    align-items: left;
+    align-items: center;
     position: fixed;
-    top: 30%;
+    top: calc(10px + 80px + 30px);
+    /* below navbar */
     left: 20px;
     right: 20px;
     max-width: 95%;
-    max-height:50%;
-    padding: 15px 40px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    
+    padding: 24px 40px;
+    border-radius: 24px;
+    background: rgba(255, 240, 220, 0.78);
+    box-shadow:
+        0 8px 0px rgba(169, 120, 80, 0.35),
+        0 16px 40px rgba(160, 100, 60, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.7),
+        inset 0 -2px 4px rgba(180, 130, 90, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.6);
 }
+
 .content-heading {
-    color: whitesmoke;
+    color: #7a4828;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PAGE WRAPPER — sits below the fixed clay navbar
+════════════════════════════════════════════════════════════════ */
+.page-wrapper {
+    min-height: 100vh;
+    padding-top: 115px;     /* clears navbar (10px top + 80px height + 25px gap) */
+    padding-bottom: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Vertically centred variant — used for login / register forms */
+.page-wrapper.centered {
+    align-items: center;
+    padding-top: 100px;
+}
+
+/* ─── MAIN CONTENT CARD (Home, About, Profile) ─────────────── */
+.page-card {
+    width: 100%;
+    max-width: 900px;
+    padding: 44px 52px;
+    border-radius: 28px;
+    background: rgba(255, 240, 220, 0.82);
+    box-shadow:
+        0 8px 0px rgba(169, 120, 80, 0.45),
+        0 16px 40px rgba(160, 100, 60, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -2px 4px rgba(180, 130, 90, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.65);
+}
+
+/* ─── PAGE TITLE ─────────────────────────────────────────────── */
+.page-title {
+    color: #4e2b0f;
+    font-size: 38px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* ─── DIVIDER ────────────────────────────────────────────────── */
+.page-divider {
+    border: none;
+    border-top: 2px solid rgba(169, 120, 80, 0.28);
+    margin-bottom: 30px;
+}
+
+/* ─── CONTENT BODY (editable / blog text area) ──────────────── */
+.content-body {
+    min-height: 220px;
+    padding: 24px 28px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.42);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    color: #7a4828;
+    font-size: 16px;
+    line-height: 1.75;
+    box-shadow: inset 0 2px 8px rgba(180, 130, 90, 0.1);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PROFILE PAGE
+════════════════════════════════════════════════════════════════ */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    margin-bottom: 30px;
+}
+
+.profile-avatar {
+    width: 82px;
+    height: 82px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: rgba(200, 155, 110, 0.28);
+    border: 3px solid rgba(169, 120, 80, 0.45);
+    box-shadow:
+        0 5px 0px rgba(169, 120, 80, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7a4828;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+.profile-username {
+    color: #4e2b0f;
+    font-size: 28px;
+    font-weight: 800;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+.profile-details {
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    list-style: disc;
+}
+
+.profile-details li {
+    color: #7a4828;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   FORM CARD — Register & Login
+════════════════════════════════════════════════════════════════ */
+.form-card {
+    width: 100%;
+    max-width: 460px;
+    padding: 46px 50px;
+    border-radius: 28px;
+    background: rgba(255, 240, 220, 0.82);
+    box-shadow:
+        0 8px 0px rgba(169, 120, 80, 0.45),
+        0 16px 40px rgba(160, 100, 60, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.75),
+        inset 0 -2px 4px rgba(180, 130, 90, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.65);
+}
+
+.form-title {
+    color: #4e2b0f;
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.55);
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-label {
+    display: block;
+    color: #7a4828;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 7px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 11px 15px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(169, 120, 80, 0.32);
+    background: rgba(255, 255, 255, 0.58);
+    color: #4e2b0f;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    box-shadow: inset 0 2px 4px rgba(180, 130, 90, 0.1);
+}
+
+.form-input:focus {
+    border-color: rgba(169, 120, 80, 0.62);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow:
+        inset 0 2px 4px rgba(180, 130, 90, 0.1),
+        0 0 0 3px rgba(200, 138, 94, 0.2);
+}
+
+/* Submit button — same clay style as Register nav pill */
+.submit-btn {
+    width: 100%;
+    margin-top: 26px;
+    padding: 14px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow:
+        0 5px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 7px 0px rgba(120, 70, 30, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    filter: brightness(1.07);
+}
+
+.submit-btn:active {
+    transform: translateY(3px);
+    box-shadow:
+        0 2px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Footer link (Already have an account? / Need an account?) */
+.form-footer {
+    margin-top: 20px;
+    text-align: center;
+    color: #7a4828;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.form-footer a {
+    color: #a96838;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.form-footer a:hover {
+    color: #4e2b0f;
+    text-decoration: underline;
+}/* ════════════════════════════════════════════════════════════════
+   FLOATING ACTION BUTTON (+ New Post)
+════════════════════════════════════════════════════════════════ */
+.fab-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    font-size: 34px;
+    font-weight: 300;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 7px 0px rgba(120, 70, 30, 0.45),
+        0 14px 32px rgba(120, 70, 30, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.25s ease,
+                filter 0.25s ease;
+    z-index: 100;
+    line-height: 1;
+    user-select: none;
+}
+
+.fab-btn:hover {
+    transform: translateY(-3px) scale(1.07);
+    box-shadow:
+        0 10px 0px rgba(120, 70, 30, 0.4),
+        0 18px 38px rgba(120, 70, 30, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    filter: brightness(1.08);
+}
+
+.fab-btn.active {
+    transform: rotate(45deg) scale(1.05);
+}
+
+.fab-btn.active:hover {
+    transform: rotate(45deg) scale(1.1);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   EDITOR OVERLAY BACKDROP
+════════════════════════════════════════════════════════════════ */
+.editor-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(70, 35, 8, 0.38);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.editor-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   BLOG EDITOR PANEL (slides up from bottom)
+════════════════════════════════════════════════════════════════ */
+.blog-editor {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(110%);
+    width: min(720px, calc(100% - 40px));
+    padding: 32px 40px 40px;
+    border-radius: 28px 28px 0 0;
+    background: rgba(255, 242, 224, 0.97);
+    box-shadow:
+        0 -10px 50px rgba(140, 80, 30, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-bottom: none;
+    z-index: 300;
+    transition: transform 0.42s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.blog-editor.visible {
+    transform: translateX(-50%) translateY(0);
+}
+
+.editor-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.editor-title {
+    color: #4e2b0f;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.editor-close-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(169, 120, 80, 0.3);
+    background: rgba(200, 155, 110, 0.18);
+    color: #7a4828;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.editor-close-btn:hover {
+    background: rgba(200, 155, 110, 0.38);
+    color: #4e2b0f;
+    transform: scale(1.08);
+}
+
+.blog-textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    border: 1.5px solid rgba(169, 120, 80, 0.28);
+    background: rgba(255, 255, 255, 0.55);
+    color: #4e2b0f;
+    font-size: 16px;
+    font-family: inherit;
+    line-height: 1.75;
+    resize: vertical;
+    outline: none;
+    box-shadow: inset 0 2px 8px rgba(180, 130, 90, 0.1);
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    margin-bottom: 18px;
+    display: block;
+}
+
+.blog-textarea:focus {
+    border-color: rgba(169, 120, 80, 0.58);
+    background: rgba(255, 255, 255, 0.78);
+    box-shadow:
+        inset 0 2px 8px rgba(180, 130, 90, 0.1),
+        0 0 0 3px rgba(200, 138, 94, 0.2);
+}
+
+.blog-textarea::placeholder {
+    color: rgba(122, 72, 40, 0.45);
+    font-style: italic;
+}
+
+.editor-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+.upload-btn {
+    padding: 12px 38px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50px;
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow:
+        0 5px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.22s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 7px 0px rgba(120, 70, 30, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    filter: brightness(1.08);
+}
+
+.upload-btn:active {
+    transform: translateY(3px);
+    box-shadow:
+        0 2px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ════════════════════════════════════════════════════════════════
+   AUTH REQUIRED MODAL
+════════════════════════════════════════════════════════════════ */
+.auth-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(70, 35, 8, 0.45);
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+}
+
+.auth-modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.auth-modal {
+    width: min(400px, calc(100% - 40px));
+    padding: 42px 38px 34px;
+    border-radius: 26px;
+    background: rgba(255, 242, 224, 0.97);
+    box-shadow:
+        0 8px 0px rgba(169, 120, 80, 0.45),
+        0 24px 64px rgba(100, 55, 15, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.68);
+    text-align: center;
+    transform: scale(0.88) translateY(12px);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.auth-modal-overlay.visible .auth-modal {
+    transform: scale(1) translateY(0);
+}
+
+.auth-modal-icon {
+    font-size: 40px;
+    margin-bottom: 14px;
+    display: block;
+}
+
+.auth-modal-heading {
+    color: #4e2b0f;
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.auth-modal-text {
+    color: #7a4828;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.55;
+    margin-bottom: 28px;
+}
+
+.auth-modal-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.auth-modal-btn {
+    padding: 11px 28px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: all 0.22s ease;
+    display: inline-block;
+}
+
+.auth-modal-btn.login-btn {
+    background: rgba(200, 155, 110, 0.22);
+    border: 1.5px solid rgba(169, 120, 80, 0.38);
+    color: #7a4828;
+}
+
+.auth-modal-btn.login-btn:hover {
+    background: rgba(200, 155, 110, 0.42);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 0px rgba(169, 120, 80, 0.3);
+}
+
+.auth-modal-btn.register-btn {
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+        0 4px 0px rgba(120, 70, 30, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.auth-modal-btn.register-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow:
+        0 6px 0px rgba(120, 70, 30, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.auth-modal-close {
+    background: none;
+    border: none;
+    color: rgba(122, 72, 40, 0.55);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    padding: 4px 8px;
+    transition: color 0.2s ease;
+}
+
+.auth-modal-close:hover {
+    color: #4e2b0f;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TOAST NOTIFICATION
+════════════════════════════════════════════════════════════════ */
+.toast-msg {
+    position: fixed;
+    bottom: 112px;
+    right: 32px;
+    padding: 14px 22px;
+    border-radius: 16px;
+    background: rgba(255, 242, 224, 0.97);
+    color: #4e2b0f;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    border: 2px solid rgba(255, 255, 255, 0.68);
+    box-shadow:
+        0 5px 0px rgba(169, 120, 80, 0.38),
+        0 14px 30px rgba(100, 55, 15, 0.2);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 600;
+    pointer-events: none;
+}
+
+.toast-msg.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ----------------------------------------------------------------
+   FORM FIELD VALIDATION STATES
+---------------------------------------------------------------- */
+.form-input.input-error {
+    border-color: rgba(200, 60, 40, 0.65);
+    background: rgba(255, 245, 243, 0.75);
+    box-shadow: inset 0 2px 4px rgba(200, 60, 40, 0.1);
+}
+
+.form-input.input-ok {
+    border-color: rgba(50, 160, 80, 0.55);
+    background: rgba(242, 255, 246, 0.7);
+    box-shadow: inset 0 2px 4px rgba(50, 160, 80, 0.08);
+}
+
+/* Inline field messages */
+.field-msg {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 5px;
+    line-height: 1.4;
+}
+
+.field-err { color: rgba(185, 45, 25, 0.9); }
+.field-ok  { color: rgba(35, 140, 65, 0.9); }
+
+/* -- SUCCESS BANNER ------------------------------------------- */
+.form-success-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    background: rgba(40, 160, 80, 0.12);
+    border: 1.5px solid rgba(40, 160, 80, 0.3);
+    color: rgba(25, 120, 60, 0.95);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.45;
+    text-align: center;
+    animation: fadeSlideUp 0.35s ease;
+}
+
+.success-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* -- WELCOME TITLE NAME HIGHLIGHT ------------------------------ */
+.welcome-name {
+    color: #a96838;
+    font-style: italic;
+}
+
+/* -- NAV USER CHIP (shown when logged in) ---------------------- */
+.nav-user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 50px;
+    background: rgba(200, 155, 110, 0.22);
+    border: 1.5px solid rgba(169, 120, 80, 0.3);
+    color: #6b3f1f;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.nav-logout-btn {
+    background: transparent;
+    border: 1.5px solid rgba(169, 120, 80, 0.35) !important;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* ----------------------------------------------------------------
+   PASSWORD SHOW / HIDE TOGGLE
+---------------------------------------------------------------- */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-input {
+    padding-right: 58px;  /* room for the Show/Hide button */
+    flex: 1;
+}
+
+.show-pass-btn {
+    position: absolute;
+    right: 14px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: inherit;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: rgba(122, 72, 40, 0.65);
+    padding: 4px 2px;
+    transition: color 0.2s ease;
+    user-select: none;
+}
+
+.show-pass-btn:hover {
+    color: #4e2b0f;
+}
+
+/* ----------------------------------------------------------------
+   NAV � PROFILE INITIALS BADGE + HOME WELCOME
+---------------------------------------------------------------- */
+.nav-initials-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #c98a5e, #a96838);
+    color: #fff8f2;
+    font-size: 10px;
+    font-weight: 800;
+    margin-right: 6px;
+    box-shadow: 0 2px 0px rgba(120, 70, 30, 0.35);
+    vertical-align: middle;
+    flex-shrink: 0;
+}
+
+#nav-profile {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ----------------------------------------------------------------
+   SPACING � more gap between navbar and content
+---------------------------------------------------------------- */
+.page-wrapper {
+    padding-top: 145px !important;   /* was 115px � extra 30px breathing room */
+}
+
+.page-wrapper.centered {
+    padding-top: 130px !important;
+}
+
+.clay-content {
+    top: calc(10px + 80px + 55px) !important;  /* was +30px */
 }
