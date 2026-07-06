@@ -7,22 +7,400 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- ════════════════════════════════════════════════════════════
+         NAVIGATION BAR
+    ════════════════════════════════════════════════════════════════ -->
     <div class="clay-bar">
         <div class="nav-left">
             <img src="logo.jpg" alt="Logo" class="nav-logo">
             <h2 class="brand-name">DraftDeck</h2>
         </div>
         <nav class="nav-links">
-            <a href="home.html"    class="nav-link">Home</a>
-            <a href="about.html"   class="nav-link">About</a>
-            <a href="profile.html" class="nav-link">Profile</a>
-            <a href="login.html"   class="nav-link login">Log In</a>
-            <a href="register.html" class="nav-link register">Register</a>
+            <a href="#" class="nav-link" data-page="home" id="nav-home">Home</a>
+            <a href="#" class="nav-link" data-page="about" id="nav-about">About</a>
+            <a href="#" class="nav-link" data-page="profile" id="nav-profile" style="display:none;">Profile</a>
+            <span id="nav-auth">
+                <a href="#" class="nav-link login" data-page="login" id="nav-login">Log In</a>
+                <a href="#" class="nav-link register" data-page="register" id="nav-register">Register</a>
+            </span>
+            <span id="nav-user" style="display:none;">
+                <span class="nav-user-chip">
+                    <span class="nav-initials-badge" id="nav-initials"></span>
+                    <span id="nav-username"></span>
+                </span>
+                <a href="#" class="nav-link nav-logout-btn" id="nav-logout">Log Out</a>
+            </span>
         </nav>
     </div>
-    <div class="clay-content">
-        <h4 class="content-heading">Username</h4>
-        <h4 class="content-heading">Date and Time</h4>
+
+    <!-- ════════════════════════════════════════════════════════════
+         HOME PAGE - Blog listing and creation
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page-wrapper" id="page-home">
+        <div class="page-card">
+            <h1 class="page-title" id="home-title">Home</h1>
+            <hr class="page-divider">
+
+            <!-- Welcome message (shown when logged in) -->
+            <div class="welcome-banner" id="welcome-banner" style="display:none;">
+                <span class="welcome-icon">👋</span>
+                <span>Welcome, <span class="welcome-name" id="welcome-username"></span>!</span>
+            </div>
+
+            <!-- Blog posts container -->
+            <div class="blog-list" id="blog-list">
+                <!-- Blogs will be loaded here dynamically -->
+            </div>
+
+            <!-- Empty state -->
+            <div class="empty-state" id="empty-state" style="display:none;">
+                <span class="empty-icon">📝</span>
+                <p class="empty-text">No blog posts yet.</p>
+                <p class="empty-subtext">Click the + button to create your first blog!</p>
+            </div>
+        </div>
     </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         FLOATING ACTION BUTTON (New Blog)
+    ════════════════════════════════════════════════════════════════ -->
+    <button class="fab-btn" id="fab-btn" aria-label="New blog post">+</button>
+
+    <!-- ════════════════════════════════════════════════════════════
+         BLOG EDITOR PANEL
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="editor-overlay" id="editor-overlay"></div>
+
+    <div class="blog-editor" id="blog-editor" role="dialog" aria-label="Blog editor">
+        <div class="editor-header">
+            <h3 class="editor-title" id="editor-title">New Blog Post</h3>
+            <button class="editor-close-btn" id="editor-close" aria-label="Close editor">×</button>
+        </div>
+
+        <!-- Blog Title -->
+        <div class="form-group">
+            <label class="form-label" for="blog-title">Blog Title</label>
+            <input class="form-input" type="text" id="blog-title" placeholder="Enter your blog title..." autocomplete="off">
+        </div>
+
+        <!-- Blog Content -->
+        <textarea
+            class="blog-textarea"
+            id="blog-textarea"
+            placeholder="Write your blog here..."></textarea>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+            <label class="form-label" for="blog-image">Cover Image (Optional)</label>
+            <div class="image-upload-wrapper">
+                <input type="file" id="blog-image" accept="image/*" class="image-input">
+                <label for="blog-image" class="image-upload-label">
+                    <span class="upload-icon">📷</span>
+                    <span class="upload-text">Choose Image</span>
+                </label>
+                <span class="image-name" id="image-name"></span>
+            </div>
+            <div class="image-preview" id="image-preview" style="display:none;">
+                <img id="preview-img" src="" alt="Preview">
+                <button type="button" class="remove-image" id="remove-image">×</button>
+            </div>
+        </div>
+
+        <div class="editor-actions">
+            <button class="upload-btn" id="publish-btn" type="button">Publish</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         AUTH REQUIRED MODAL
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="auth-modal-overlay" id="auth-modal-overlay" role="dialog" aria-label="Sign in required">
+        <div class="auth-modal">
+            <span class="auth-modal-icon">🔒</span>
+            <h2 class="auth-modal-heading">Sign in required</h2>
+            <p class="auth-modal-text" id="auth-modal-text">You need to be logged in before you can upload a blog post.</p>
+            <div class="auth-modal-actions">
+                <a href="#" class="auth-modal-btn login-btn" data-page="login">Log In</a>
+                <a href="#" class="auth-modal-btn register-btn" data-page="register">Register</a>
+            </div>
+            <button class="auth-modal-close" id="auth-modal-close" type="button">Cancel</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         ABOUT PAGE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page-wrapper" id="page-about" style="display:none;">
+        <div class="page-card">
+            <h1 class="page-title">About</h1>
+            <hr class="page-divider">
+
+            <div class="content-body about-content">
+                <section class="about-section">
+                    <h2 class="about-section-title">Welcome to DraftDeck</h2>
+                    <p>DraftDeck is a modern blogging platform designed for writers, creators, and storytellers. We believe everyone has a story to tell, and we've built the perfect tools to help you share yours with the world.</p>
+                </section>
+
+                <section class="about-section">
+                    <h2 class="about-section-title">Our Purpose</h2>
+                    <p>Our mission is to make blogging simple, beautiful, and accessible to everyone. Whether you're a seasoned writer or just starting your creative journey, DraftDeck provides you with a clean, distraction-free environment to express your thoughts.</p>
+                </section>
+
+                <section class="about-section">
+                    <h2 class="about-section-title">Key Features</h2>
+                    <ul class="about-features">
+                        <li><span class="feature-icon">✍️</span> <strong>Easy Writing</strong> - Clean editor for distraction-free writing</li>
+                        <li><span class="feature-icon">🖼️</span> <strong>Image Support</strong> - Add cover images to make your blogs visually appealing</li>
+                        <li><span class="feature-icon">👤</span> <strong>User Profiles</strong> - Personalize your profile with avatars and details</li>
+                        <li><span class="feature-icon">🔒</span> <strong>Secure Auth</strong> - Safe registration and login system</li>
+                        <li><span class="feature-icon">💾</span> <strong>Auto-Save</strong> - Your data is safely stored locally</li>
+                    </ul>
+                </section>
+
+                <section class="about-section">
+                    <h2 class="about-section-title">Why Choose DraftDeck?</h2>
+                    <ul class="about-benefits">
+                        <li>Simple and intuitive interface</li>
+                        <li>No complicated setup required</li>
+                        <li>Your privacy is respected</li>
+                        <li>Completely free to use</li>
+                        <li>Regular updates and improvements</li>
+                    </ul>
+                </section>
+
+                <section class="about-section">
+                    <h2 class="about-section-title">Future Plans</h2>
+                    <p>We're constantly working to improve DraftDeck. Coming soon:</p>
+                    <ul class="about-future">
+                        <li>Rich text editor with formatting options</li>
+                        <li>Categories and tags for better organization</li>
+                        <li>Social features - follow other writers</li>
+                        <li>Comments and engagement</li>
+                        <li>Export/import functionality</li>
+                    </ul>
+                </section>
+
+                <section class="about-section">
+                    <h2 class="about-section-title">Contact Us</h2>
+                    <p>We'd love to hear from you! Whether you have feedback, suggestions, or just want to say hello, reach out to us.</p>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <span class="contact-icon">📧</span>
+                            <span>Email: hello@draftdeck.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <span class="contact-icon">🌐</span>
+                            <span>Website: www.draftdeck.com</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PROFILE PAGE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page-wrapper" id="page-profile" style="display:none;">
+        <div class="page-card">
+            <h1 class="page-title">Profile</h1>
+            <hr class="page-divider">
+
+            <div class="profile-header">
+                <!-- Profile Picture -->
+                <div class="profile-avatar-wrapper">
+                    <div class="profile-avatar" id="profile-avatar">?</div>
+                    <label for="profile-picture-upload" class="avatar-edit-btn">📷</label>
+                    <input type="file" id="profile-picture-upload" accept="image/*" style="display:none;">
+                </div>
+                <div>
+                    <span class="profile-username" id="profile-username">Username</span>
+                    <p class="profile-email" id="profile-email"></p>
+                </div>
+            </div>
+
+            <ul class="profile-details">
+                <li>
+                    <button class="profile-action-btn" id="change-password-btn">Change Password</button>
+                </li>
+                <li>
+                    <button class="profile-action-btn" id="add-address-btn">Add Address</button>
+                </li>
+            </ul>
+
+            <button id="profile-logout" class="nav-link login" style="margin-top:28px;cursor:pointer;border:none;font-family:inherit;font-size:15px;">Log Out</button>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         CHANGE PASSWORD MODAL
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="password-modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Change Password</h3>
+                <button class="modal-close-btn" id="password-modal-close">×</button>
+            </div>
+            <form id="change-password-form">
+                <div class="form-group">
+                    <label class="form-label" for="current-password">Current Password</label>
+                    <input class="form-input" type="password" id="current-password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="new-password">New Password</label>
+                    <input class="form-input" type="password" id="new-password" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="confirm-new-password">Confirm New Password</label>
+                    <input class="form-input" type="password" id="confirm-new-password" required>
+                </div>
+                <button type="submit" class="submit-btn">Update Password</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         ADDRESS MODAL
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="modal-overlay" id="address-modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="address-modal-title">Add Address</h3>
+                <button class="modal-close-btn" id="address-modal-close">×</button>
+            </div>
+            <form id="address-form">
+                <div class="form-group">
+                    <label class="form-label" for="address-street">Street Address</label>
+                    <input class="form-input" type="text" id="address-street" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="address-city">City</label>
+                    <input class="form-input" type="text" id="address-city" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="address-state">State/Province</label>
+                    <input class="form-input" type="text" id="address-state" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="address-zip">ZIP/Postal Code</label>
+                    <input class="form-input" type="text" id="address-zip" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="address-country">Country</label>
+                    <input class="form-input" type="text" id="address-country" required>
+                </div>
+                <button type="submit" class="submit-btn" id="save-address-btn">Save Address</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         LOGIN PAGE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page-wrapper centered" id="page-login" style="display:none;">
+        <form class="form-card" id="login-form">
+            <h1 class="form-title">Log In</h1>
+
+            <div class="form-group">
+                <label class="form-label" for="login-identifier">Username or Email</label>
+                <input class="form-input" type="text" id="login-identifier" autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="login-password">Password</label>
+                <div class="password-wrapper">
+                    <input class="form-input" type="password" id="login-password" autocomplete="current-password" required>
+                    <button type="button" class="show-pass-btn" data-target="login-password">Show</button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Log In</button>
+
+            <p class="form-footer">Need An Account? <a href="#" data-page="register">Sign Up</a></p>
+
+            <!-- Error message container -->
+            <div class="form-error-banner" id="login-error" style="display:none;">
+                <span class="error-icon">⚠️</span>
+                <span id="login-error-text"></span>
+            </div>
+        </form>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         REGISTER PAGE
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="page-wrapper centered" id="page-register" style="display:none;">
+        <form class="form-card" id="register-form">
+            <h1 class="form-title">Join Today</h1>
+
+            <div class="form-group">
+                <label class="form-label" for="reg-username">Username</label>
+                <input class="form-input" type="text" id="reg-username" autocomplete="username" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="reg-email">Email Address</label>
+                <input class="form-input" type="email" id="reg-email" autocomplete="email" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="reg-password">Password</label>
+                <div class="password-wrapper">
+                    <input class="form-input" type="password" id="reg-password" autocomplete="new-password" required>
+                    <button type="button" class="show-pass-btn" data-target="reg-password">Show</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="reg-confirm">Confirm Password</label>
+                <div class="password-wrapper">
+                    <input class="form-input" type="password" id="reg-confirm" autocomplete="new-password" required>
+                    <button type="button" class="show-pass-btn" data-target="reg-confirm">Show</button>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">Create Account</button>
+
+            <p class="form-footer">Already Have A Account? <a href="#" data-page="login">Sign In</a></p>
+
+            <!-- Error message container -->
+            <div class="form-error-banner" id="register-error" style="display:none;">
+                <span class="error-icon">⚠️</span>
+                <span id="register-error-text"></span>
+            </div>
+        </form>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         TOAST NOTIFICATION
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="toast-msg" id="toast">
+        <span class="toast-text" id="toast-text"></span>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         LOADING SPINNER
+    ════════════════════════════════════════════════════════════════ -->
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="loader">
+            <div class="book-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 126 75" class="book">
+                    <rect stroke-width="5" stroke="#e05452" rx="7.5" height="70" width="121" y="2.5" x="2.5"></rect>
+                    <line stroke-width="5" stroke="#e05452" y2="75" x2="63.5" x1="63.5"></line>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M25 20H50"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M101 20H76"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M16 30L50 30"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M110 30L76 30"></path>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff74" viewBox="0 0 65 75" class="book-page">
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M40 20H15"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M49 30L15 30"></path>
+                    <path stroke-width="5" stroke="#e05452" d="M2.5 2.5H55C59.1421 2.5 62.5 5.85786 62.5 10V65C62.5 69.1421 59.1421 72.5 55 72.5H2.5V2.5Z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
