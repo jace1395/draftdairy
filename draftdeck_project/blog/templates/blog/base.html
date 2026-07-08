@@ -1,0 +1,136 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DraftDeck</title>
+    <link rel="stylesheet" href="{% static 'blog/style.css' %}">
+</head>
+<body>
+    
+    <div class="clay-bar">
+        <div class="nav-left">
+            <img src="{% static 'blog/logo.png' %}" alt="Logo" class="nav-logo">
+            <h2 class="brand-name">DraftDeck</h2>
+        </div>
+        
+        <nav class="nav-links">
+            <a href="{% url 'blog-home' %}" class="nav-link">Home</a>
+            <a href="{% url 'blog-about' %}" class="nav-link">About</a>
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}" class="nav-link">Profile</a>
+                <span class="nav-user-chip">
+                    <span class="nav-initials-badge">{{ user.username|make_list|first|upper }}</span>
+                    <span>{{ user.username }}</span>
+                </span>
+                
+                <form method="POST" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-link nav-logout-btn" style="border:none;">Log Out</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="nav-link login">Log In</a>
+                <a href="{% url 'register' %}" class="nav-link register">Register</a>
+            {% endif %}
+        </nav>
+    </div>
+
+    {% if messages %}
+        <div style="position: fixed; top: 110px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;">
+            {% for message in messages %}
+                <div class="form-success-banner" style="margin:0; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <span class="success-icon">✓</span>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% block content %}{% endblock content %}
+
+    <button class="fab-btn" id="fab-btn" aria-label="New blog post">+</button>
+
+    {% if user.is_authenticated %}
+        <div class="editor-overlay" id="editor-overlay"></div>
+        <div class="blog-editor" id="blog-editor" role="dialog">
+            
+            <form action="{% url 'post-create' %}" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="editor-header">
+                    <h3 class="editor-title">New Blog Post</h3>
+                    <button type="button" class="editor-close-btn">&times;</button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="blog-title">Blog Title</label>
+                    <input class="form-input" type="text" id="blog-title" name="title" placeholder="Enter your blog title..." required>
+                </div>
+
+                <div class="form-group">
+                    <textarea class="blog-textarea" id="blog-textarea" name="content" placeholder="Write your blog here..." rows="6" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Cover Image (Optional)</label>
+                    <div class="image-upload-wrapper">
+                        <input type="file" id="blog-image" name="image" accept="image/*" class="image-input">
+                        <label for="blog-image" class="image-upload-label">
+                            <span class="upload-icon">📷</span>
+                            <span class="upload-text">Choose Image</span>
+                        </label>
+                        <span class="image-name" id="image-name" style="margin-left: 10px;"></span>
+                    </div>
+                    
+                    <div class="image-preview" id="image-preview" style="display:none; margin-top: 15px;">
+                        <img id="preview-img" src="" alt="Preview" style="max-width: 200px; border-radius: 8px;">
+                        <button type="button" class="remove-image" id="remove-image" style="position: absolute; top: -10px; left: 180px;">&times;</button>
+                    </div>
+                </div>
+
+                <div class="editor-actions">
+                    <button class="upload-btn" type="submit">Publish</button>
+                </div>
+            </form>
+        </div>
+
+    {% else %}
+        <div class="auth-modal-overlay" id="auth-modal-overlay" role="dialog">
+            <div class="auth-modal">
+                <span class="auth-modal-icon">🔒</span>
+                <h2 class="auth-modal-heading">Sign in required</h2>
+                <p class="auth-modal-text">You need to be logged in before you can upload a blog post.</p>
+                <div class="auth-modal-actions">
+                    <a href="{% url 'login' %}" class="auth-modal-btn login-btn">Log In</a>
+                    <a href="{% url 'register' %}" class="auth-modal-btn register-btn">Register</a>
+                </div>
+                <button class="auth-modal-close" type="button">Cancel</button>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="loader-overlay" id="loader-overlay">
+        <div class="loader">
+            <div class="book-wrapper">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 126 75" class="book">
+                    <rect stroke-width="5" stroke="#e05452" rx="7.5" height="70" width="121" y="2.5" x="2.5"></rect>
+                    <line stroke-width="5" stroke="#e05452" y2="75" x2="63.5" x1="63.5"></line>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M25 20H50"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M101 20H76"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M16 30L50 30"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M110 30L76 30"></path>
+                </svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="#ffffff74" viewBox="0 0 65 75" class="book-page">
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M40 20H15"></path>
+                    <path stroke-linecap="round" stroke-width="4" stroke="#c18949" d="M49 30L15 30"></path>
+                    <path stroke-width="5" stroke="#e05452" d="M2.5 2.5H55C59.1421 2.5 62.5 5.85786 62.5 10V65C62.5 69.1421 59.1421 72.5 55 72.5H2.5V2.5Z"></path>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'blog/app.js' %}?v=2"></script>
+</body>
+</html>

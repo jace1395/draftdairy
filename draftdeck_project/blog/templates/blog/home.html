@@ -1,0 +1,42 @@
+{% extends "blog/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="page-wrapper" id="page-home">
+    <div class="page-card">
+        <h1 class="page-title">Home</h1>
+        <hr class="page-divider">
+
+        {% if user.is_authenticated %}
+        <div class="welcome-banner">
+            <span class="welcome-icon">👋</span>
+            <span>Welcome, <span class="welcome-name">{{ user.username }}</span>!</span>
+        </div>
+        {% endif %}
+
+        <div class="blog-list">
+            {% for post in posts %}
+                <div class="blog-card">
+                    <div class="blog-card-header">
+                        <h2 class="blog-card-title">{{ post.title }}</h2>
+                        <span class="blog-card-date">{{ post.date_posted|date:"F d, Y" }}</span>
+                    </div>
+                    
+                    <div class="blog-card-content">{{ post.content }}</div>
+                    
+                    <div class="blog-card-author">
+                        <span class="blog-card-author-avatar">{{ post.author.username|make_list|first|upper }}</span>
+                        <span class="blog-card-author-name">{{ post.author.username }}</span>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="empty-state">
+                    <span class="empty-icon">📝</span>
+                    <p class="empty-text">No blog posts yet.</p>
+                    <p class="empty-subtext">Click the + button to create your first blog!</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
