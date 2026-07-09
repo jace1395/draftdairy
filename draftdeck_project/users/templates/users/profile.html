@@ -1,0 +1,45 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="page-wrapper" id="page-profile">
+    <div class="page-card">
+        <h1 class="page-title">Profile</h1>
+        <hr class="page-divider">
+
+        <div class="profile-header">
+            
+            <div class="profile-avatar-wrapper">
+                {% if profile.avatar and profile.avatar.name != 'default.jpg' %}
+                    <img src="{{ profile.avatar.url }}" alt="Avatar" style="width: 82px; height: 82px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(169, 120, 80, 0.45);">
+                {% else %}
+                    <div class="profile-avatar">{{ user.username|make_list|first|upper }}</div>
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data" id="django-avatar-form">
+                    {% csrf_token %}
+                    <label for="django-avatar-upload" class="avatar-edit-btn" style="cursor:pointer;" title="Change Avatar">📷</label>
+                    <input type="file" name="avatar" id="django-avatar-upload" accept="image/*" style="display:none;" onchange="document.getElementById('django-avatar-form').submit();">
+                </form>
+            </div>
+
+            <div style="flex-grow: 1;">
+                <span class="profile-username">{{ user.username }}</span>
+                <p class="profile-email" style="color: #7a4828; margin-top: 5px;">{{ user.email }}</p>
+            </div>
+        </div>
+
+        <ul class="profile-details">
+            <li><button class="profile-action-btn" id="change-password-btn">Change Password</button></li>
+            <li><button class="profile-action-btn" id="add-address-btn">Add Address</button></li>
+        </ul>
+
+        <form method="POST" action="{% url 'logout' %}" style="margin-top: 35px;">
+             {% csrf_token %}
+             <button type="submit" class="submit-btn" style="width: auto; padding: 10px 30px; background: rgba(200, 60, 40, 0.8);">Log Out</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock content %}

@@ -19,15 +19,14 @@
                 <div class="blog-card">
                     <div class="blog-card-header">
                         <h2 class="blog-card-title">{{ post.title }}</h2>
-                        <span class="blog-card-date">{{ post.date_posted|date:"F d, Y" }}</span>
+                            <span class="blog-card-date">{{ post.date_posted|date:"F d, Y" }}</span>
                     </div>
-                    
+    
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Cover Image" class="blog-card-image">
+                    {% endif %}
+    
                     <div class="blog-card-content">{{ post.content }}</div>
-                    
-                    <div class="blog-card-author">
-                        <span class="blog-card-author-avatar">{{ post.author.username|make_list|first|upper }}</span>
-                        <span class="blog-card-author-name">{{ post.author.username }}</span>
-                    </div>
                 </div>
             {% empty %}
                 <div class="empty-state">

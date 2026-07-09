@@ -8,12 +8,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const blogEditor = document.getElementById("blog-editor");
     const authOverlay = document.getElementById("auth-modal-overlay");
     
+    // Grab the navbar so we can slide it away
+    const topNav = document.querySelector('.clay-bar'); 
+    
     // Select all potential close buttons
     const closeBtns = document.querySelectorAll(".editor-close-btn, .auth-modal-close");
 
     // Open Modal Logic
     if (fabBtn) {
         fabBtn.addEventListener("click", function() {
+            // Instantly slide the navbar out of the screen!
+            if (topNav) topNav.classList.add("hidden");
+
             // Logged In: Show Editor
             if (editorOverlay && blogEditor) {
                 editorOverlay.classList.add("visible");
@@ -32,6 +38,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (editorOverlay) editorOverlay.classList.remove("visible");
             if (blogEditor) blogEditor.classList.remove("visible");
             if (authOverlay) authOverlay.classList.remove("visible");
+            
+            // Bring the navbar back!
+            if (topNav) topNav.classList.remove("hidden");
         });
     });
 
@@ -40,9 +49,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (event.target === editorOverlay) {
             editorOverlay.classList.remove("visible");
             if (blogEditor) blogEditor.classList.remove("visible");
+            if (topNav) topNav.classList.remove("hidden"); // Bring navbar back
         }
         if (event.target === authOverlay) {
             authOverlay.classList.remove("visible");
+            if (topNav) topNav.classList.remove("hidden"); // Bring navbar back
         }
     });
 
