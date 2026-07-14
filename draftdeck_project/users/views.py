@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
-from blog.models import Profile 
+from blog.models import Profile, Post 
 
 def register(request):
     if request.method == 'POST':
@@ -18,18 +18,13 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-
 @login_required
 def profile(request):
-    
-    # --- TERMINAL TRACKER ---
-    print("\n==== PROFILE UPLOAD TEST ====")
     print("Method Used:", request.method)
 
     user_profile, created = Profile.objects.get_or_create(user=request.user)
 
     if request.method == 'POST':
-        # Tells us if the image successfully arrived
         print("Files Received:", request.FILES)
 
         if 'avatar' in request.FILES:
@@ -43,5 +38,22 @@ def profile(request):
 
         return redirect('profile')
 
-    context = {'profile': user_profile}
+    user_posts = Post.objects.filter(author=request.user).order_by('-date_posted')
+
+    context = {
+        'profile': user_profile,
+        'user_posts': user_posts
+    }
     return render(request, 'users/profile.html', context)
+
+@login_required
+def update_address(request):
+    user_profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        user_profile.address = request.POST.get('address')
+        user_profile.save()
+        messages.success(request, 'Your address has been successfully updated!')
+        return redirect('profile')
+        
+    return render(request, 'users/update_address.html', {'profile': user_profile})

@@ -1,5 +1,4 @@
 {% extends "blog/base.html" %}
-{% load static %}
 {% block content %}
 
 <div class="page-wrapper" id="page-profile">
@@ -26,18 +25,53 @@
             <div style="flex-grow: 1;">
                 <span class="profile-username">{{ user.username }}</span>
                 <p class="profile-email" style="color: #7a4828; margin-top: 5px;">{{ user.email }}</p>
+                
+                {% if profile.address %}
+                    <p style="color: #4a2c11; margin-top: 10px; font-size: 13px; font-weight: bold;">📍 {{ profile.address }}</p>
+                {% endif %}
             </div>
         </div>
 
-        <ul class="profile-details">
-            <li><button class="profile-action-btn" id="change-password-btn">Change Password</button></li>
-            <li><button class="profile-action-btn" id="add-address-btn">Add Address</button></li>
-        </ul>
+        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
+            <a href="{% url 'password_change' %}" class="submit-btn" style="text-decoration: none !important; font-size: 12px; padding: 0 15px; height: 35px; display: inline-flex; align-items: center; justify-content: center; width: auto; background: rgba(169, 120, 80, 0.8);">Change Password</a>
+            <a href="{% url 'update_address' %}" class="submit-btn" style="text-decoration: none !important; font-size: 12px; padding: 0 15px; height: 35px; display: inline-flex; align-items: center; justify-content: center; width: auto; background: rgba(169, 120, 80, 0.8);">Add Address</a>
+        </div>
 
-        <form method="POST" action="{% url 'logout' %}" style="margin-top: 35px;">
+        <form method="POST" action="{% url 'logout' %}" style="margin-bottom: 40px;">
              {% csrf_token %}
              <button type="submit" class="submit-btn" style="width: auto; padding: 10px 30px; background: rgba(200, 60, 40, 0.8);">Log Out</button>
         </form>
+
+        <hr class="page-divider" style="margin: 40px 0;">
+        <h2 style="font-size: 24px; color: #4a2c11; margin-bottom: 20px;">My Published Blogs</h2>
+
+        <div class="blog-list">
+            {% for post in user_posts %}
+                <div class="blog-card">
+                    <div class="blog-card-header">
+                        <h2 class="blog-card-title">{{ post.title }}</h2>
+                        <span class="blog-card-date">{{ post.date_posted|date:"F d, Y" }}</span>
+                    </div>
+
+                    {% if post.image %}
+                        <img src="{{ post.image.url }}" alt="Cover Image" class="blog-card-image" style="margin-bottom: 15px;">
+                    {% endif %}
+
+                    <div class="blog-card-content">{{ post.content }}</div>
+
+                    <div style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+                        <a href="{% url 'post-update' post.id %}" class="submit-btn" style="text-decoration: none !important; font-size: 12px; padding: 0 15px; height: 35px; display: inline-flex; align-items: center; justify-content: center; width: auto; background: rgba(169, 120, 80, 0.8);">Edit Post</a>
+                        
+                        <form method="POST" action="{% url 'post-delete' post.id %}" onsubmit="return confirm('Are you sure you want to permanently delete this post?');" style="margin: 0; display: flex;">
+                            {% csrf_token %}
+                            <button type="submit" class="submit-btn" style="font-size: 12px; padding: 0 15px; height: 35px; display: inline-flex; align-items: center; justify-content: center; width: auto; background: rgba(200, 60, 40, 0.8);">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <p style="color: #7a4828; font-style: italic;">You haven't published any blogs yet.</p>
+            {% endfor %}
+        </div>
 
     </div>
 </div>

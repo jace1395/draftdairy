@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="page-wrapper">
+    <div class="page-card" style="max-width: 500px; margin: 0 auto;">
+        <h2 style="font-size: 24px; color: #4a2c11; margin-bottom: 20px;">Update Address</h2>
+        <hr class="page-divider" style="margin-bottom: 30px;">
+        
+        <form method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Your Address</label>
+                <textarea class="blog-textarea" name="address" rows="4" required>{{ profile.address }}</textarea>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button class="submit-btn" type="submit" style="padding: 0 20px; height: 35px; width: auto; background: rgba(169, 120, 80, 0.8);">Save Address</button>
+                <a href="{% url 'profile' %}" class="submit-btn" style="padding: 0 20px; height: 35px; width: auto; display: inline-flex; align-items: center; text-decoration: none !important; background: rgba(150, 150, 150, 0.4); color: #4a2c11;">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

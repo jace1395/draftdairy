@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+{% block content %}
+
+<div class="page-wrapper">
+    <div class="page-card" style="max-width: 700px; margin: 0 auto;">
+        
+        <h2 style="font-size: 24px; color: #4a2c11; margin-bottom: 20px;">Edit Your Post</h2>
+        <hr class="page-divider" style="margin-bottom: 30px;">
+        
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label class="form-label">Blog Title</label>
+                <input class="form-input" type="text" name="title" value="{{ post.title }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Content</label>
+                <textarea class="blog-textarea" name="content" rows="8" required>{{ post.content }}</textarea>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Replace Cover Image (Optional)</label>
+                <div class="image-upload-wrapper">
+                    <input type="file" id="edit-blog-image" name="image" accept="image/*" class="image-input">
+                    <label for="edit-blog-image" class="image-upload-label">
+                        <span class="upload-icon">📷</span>
+                        <span class="upload-text">Choose Image</span>
+                    </label>
+                    <span class="image-name" id="edit-image-name" style="margin-left: 10px; font-size: 13px; color: #7a4828;">
+                        {% if post.image %}Current image attached{% endif %}
+                    </span>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 15px; margin-top: 30px; justify-content: flex-start;">
+                <button class="submit-btn" type="submit" style="padding: 0 20px; height: 35px; width: auto; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; background: rgba(169, 120, 80, 0.8);">Save Changes</button>
+                
+                <a href="{% url 'profile' %}" class="submit-btn" style="padding: 0 20px; height: 35px; width: auto; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; background: rgba(150, 150, 150, 0.4); color: #4a2c11;">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    document.getElementById('edit-blog-image').addEventListener('change', function(e) {
+        var fileName = e.target.files[0] ? e.target.files[0].name : "No file chosen";
+        document.getElementById('edit-image-name').textContent = fileName;
+    });
+</script>
+
+{% endblock content %}
